@@ -10,6 +10,19 @@ public class PlayerController : MonoBehaviour
     [Range(-5f, 5f)]
     public float edgeBuffer;
 
+    [Header ("Energy Settings")]
+    public float energyMeter;
+    public float energyMeterMax;
+    public float energyRegen;
+    public float energyRegenDisabledBoost;
+    public float bulletCost;
+    public float dashCost;
+
+    [Header("Player References")]
+    public GameObject bulletPrefab;
+
+    private bool meterDisabled = false;
+
     private ObjectPool bulletPool;
 
     private Vector2 inputDir;
@@ -69,6 +82,13 @@ public class PlayerController : MonoBehaviour
         moveDelta.y = 0f;
 
         transform.Translate(moveDelta);
+
+        //Energy
+        energyMeter += energyRegen * Time.deltaTime;
+        if (meterDisabled) energyMeter += energyRegenDisabledBoost * Time.deltaTime;
+        energyMeter = Mathf.Clamp(energyMeter, 0, energyMeterMax);
+        if (energyMeter >= energyMeterMax - 0.01f)
+            meterDisabled = false;
     }
 
     /// <summary>
@@ -133,5 +153,16 @@ public class PlayerController : MonoBehaviour
     public void Fire()
     {
         //Call object pool to create a new bullet prefab
+        if (bulletPool == null) {
+            bulletPool = ObjectPoolManager.Instance.AddPool("Bullet", bulletPrefab, 50);
+        }
+
+        if (energyMeter >= bulletCost && !meterDisabled)
+        {
+            energyMeter -= bulletCost;
+            bulletPool.Instantiate(transform.position, Quaternion.identity);
+        } else {
+            meterDisabled = true;
+        }
     }
 }

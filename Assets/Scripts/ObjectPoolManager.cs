@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    public Dictionary<string, ObjectPool> pools;
-    public int defaultMaxEntities;
+    public Dictionary<string, ObjectPool> pools = new Dictionary<string, ObjectPool>();
+    public int defaultMaxEntities = 10;
 
     private static ObjectPoolManager _instance;
 
@@ -44,7 +44,10 @@ public class ObjectPoolManager : MonoBehaviour
     /// <param name="maxEntity">Max entity count.</param>
     public ObjectPool AddPool(string ID, GameObject prefab, int maxEntity)
     {
-        ObjectPool pool = new ObjectPool(ID, prefab, maxEntity);
+        ObjectPool pool = Instance.gameObject.AddComponent<ObjectPool>() as ObjectPool;
+        pool.ID = ID;
+        pool.prefab = prefab;
+        pool.maxEntities = maxEntity;
         pools.Add(ID, pool);
         return pool;
     }

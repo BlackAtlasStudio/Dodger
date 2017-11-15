@@ -15,12 +15,12 @@ public class ObjectPool : MonoBehaviour
     /// <param name="id">Identifier.</param>
     /// <param name="p">P.</param>
     /// <param name="max">Max.</param>
-    public ObjectPool (string id, GameObject p, int max)
+    /*public ObjectPool (string id, GameObject p, int max)
     {
         ID = id;
         prefab = p;
         maxEntities = max;
-    }
+    }*/
 
     public GameObject Instantiate(Vector3 pos, Quaternion rot) {
         GameObject oldest;
