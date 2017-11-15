@@ -7,6 +7,25 @@ public class ObjectPoolManager : MonoBehaviour
     public Dictionary<string, ObjectPool> pools;
     public int defaultMaxEntities;
 
+    private static ObjectPoolManager _instance;
+
+    public static ObjectPoolManager Instance
+    {
+        get{
+            if (_instance == null) {
+                _instance = FindObjectOfType(typeof(ObjectPoolManager)) as ObjectPoolManager;
+
+                if (_instance == null) {
+                    GameObject singleton = new GameObject();
+                    _instance = singleton.AddComponent(typeof(ObjectPoolManager)) as ObjectPoolManager;
+                    singleton.name = typeof(ObjectPoolManager).ToString();
+                    DontDestroyOnLoad(singleton);
+                }
+            }
+            return _instance;
+        }
+    }
+
     /// <summary>
     /// Creates a new ObjectPool with an identifier and prefab.
     /// </summary>
