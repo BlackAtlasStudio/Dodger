@@ -5,14 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
-
+    [Header("Player Settings")]
     public float moveSpeed;
+    [Range(-5f, 5f)]
+    public float edgeBuffer;
+
+    private ObjectPool bulletPool;
 
     private Vector2 inputDir;
 
-    [SerializeField]
     private Vector3 screenBoundsMin;
-    [SerializeField]
     private Vector3 screenBoundsMax;
 
     private Vector3 camOffset;
@@ -30,7 +32,7 @@ public class PlayerController : MonoBehaviour
             screenBoundsMin = hit.point;
         else
             screenBoundsMin = new Vector3(-10f, 0f, -5f);
-        
+
         if (Physics.Raycast(maxRay, out hit, LayerMask.GetMask("PlayField")))
             screenBoundsMax = hit.point;
         else
@@ -41,6 +43,10 @@ public class PlayerController : MonoBehaviour
 
         screenBoundsMin.y = 0f;
         screenBoundsMax.y = 0f;
+
+        Vector3 edgeBufferVec = new Vector3(edgeBuffer, 0f, edgeBuffer);
+        screenBoundsMin += edgeBufferVec;
+        screenBoundsMax -= edgeBufferVec;
     }
 
     private void Update()
@@ -116,8 +122,16 @@ public class PlayerController : MonoBehaviour
     /// Updates the input vectors.
     /// </summary>
     /// <param name="dir">Direction.</param>
-    public void UpdateInput(Vector2 dir)
+    public void Movement(Vector2 dir)
     {
         inputDir = dir;
+    }
+
+    /// <summary>
+    /// Fires the main gun
+    /// </summary>
+    public void Fire()
+    {
+        //Call object pool to create a new bullet prefab
     }
 }

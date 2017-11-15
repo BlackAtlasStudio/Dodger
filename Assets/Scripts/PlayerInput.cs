@@ -19,6 +19,10 @@ public class PlayerInput : MonoBehaviour {
         inputDir.x = Input.GetAxis("Horizontal");
         inputDir.y = Input.GetAxis("Vertical");
 
-        _controller.UpdateInput(inputDir);
+        _controller.Movement(inputDir);
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            _controller.Fire();
+        }
     }
 }
