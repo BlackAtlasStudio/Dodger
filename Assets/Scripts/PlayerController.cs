@@ -6,9 +6,11 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Player Settings")]
-    public float moveSpeed;
-    [Range(-5f, 5f)]
-    public float edgeBuffer;
+    public float moveSpeedMax;
+    public float moveAcceleration;
+    [Range(0f, 5f)]
+    public float moveDrag;
+    public float fireCooldown;
 
     [Header ("Energy Settings")]
     public float energyMeter;
@@ -22,59 +24,34 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
 
     private bool meterDisabled = false;
-
     private ObjectPool bulletPool;
-
     private Vector2 inputDir;
-
-    private Vector3 screenBoundsMin;
-    private Vector3 screenBoundsMax;
-
-    private Vector3 camOffset;
-
-    private void Start()
-    {
-        //Calculates the perspective screen min and max world points intersecting with the playing plane
-        camOffset = Camera.main.transform.position;
-
-        Ray minRay = Camera.main.ScreenPointToRay(Vector3.zero);
-        Ray maxRay = Camera.main.ScreenPointToRay(new Vector3(Camera.main.pixelWidth, Camera.main.pixelHeight));
-        RaycastHit hit;
-
-        if (Physics.Raycast(minRay, out hit, LayerMask.GetMask("PlayField")))
-            screenBoundsMin = hit.point;
-        else
-            screenBoundsMin = new Vector3(-10f, 0f, -5f);
-
-        if (Physics.Raycast(maxRay, out hit, LayerMask.GetMask("PlayField")))
-            screenBoundsMax = hit.point;
-        else
-            screenBoundsMax = new Vector3(10f, 0f, 5f);
-
-        screenBoundsMin -= camOffset;
-        screenBoundsMax -= camOffset;
-
-        screenBoundsMin.y = 0f;
-        screenBoundsMax.y = 0f;
-
-        Vector3 edgeBufferVec = new Vector3(edgeBuffer, 0f, edgeBuffer);
-        screenBoundsMin += edgeBufferVec;
-        screenBoundsMax -= edgeBufferVec;
-    }
+    private Vector3 velocity = Vector3.zero;
+    private float fireTimer;
+    private bool canFire;
 
     private void Update()
     {
         //Creates a new movement delta based on the input
-        Vector3 moveDelta = Vector3.zero;
-        moveDelta.x = inputDir.x * moveSpeed;
-        moveDelta.z = inputDir.y * moveSpeed;
+        Vector3 moveDelta = velocity;
+        moveDelta.x += inputDir.x * moveAcceleration;
+        moveDelta.z += inputDir.y * moveAcceleration;
+        if (inputDir.magnitude <= 0.05f) {
+            Vector3 drag = moveDelta.normalized * -moveDrag;
+            if (drag.magnitude >= moveDelta.magnitude)
+                moveDelta = Vector3.zero;
+            else
+                moveDelta += drag;
+        }
+        moveDelta = Vector3.ClampMagnitude(moveDelta, moveSpeedMax);
+        velocity = moveDelta;
         moveDelta *= Time.deltaTime;
 
         Vector3 targetPos = transform.position + moveDelta;
 
         Vector3 camPos = Camera.main.transform.position;
-        Vector3 minBounds = camPos + screenBoundsMin;
-        Vector3 maxBounds = camPos + screenBoundsMax;
+        Vector3 minBounds = camPos + GameManager.ScreenBoundsMin;
+        Vector3 maxBounds = camPos + GameManager.ScreenBoundsMax;
 
         if (!IsWithinBounds(targetPos, minBounds, maxBounds))
             moveDelta = ClampDelta(moveDelta, minBounds, maxBounds);
@@ -89,6 +66,16 @@ public class PlayerController : MonoBehaviour
         energyMeter = Mathf.Clamp(energyMeter, 0, energyMeterMax);
         if (energyMeter >= energyMeterMax - 0.01f)
             meterDisabled = false;
+
+        //Fire Cooldown
+        if (!canFire) {
+            fireTimer += Time.deltaTime;
+            if (fireTimer >= fireCooldown)
+            {
+                fireTimer = 0f;
+                canFire = true;
+            }
+        }
     }
 
     /// <summary>
@@ -152,6 +139,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void Fire()
     {
+        if (!canFire) return;
+
         //Call object pool to create a new bullet prefab
         if (bulletPool == null) {
             bulletPool = ObjectPoolManager.Instance.AddPool("Bullet", bulletPrefab, 50);
@@ -164,5 +153,7 @@ public class PlayerController : MonoBehaviour
         } else {
             meterDisabled = true;
         }
+
+        canFire = false; 
     }
 }

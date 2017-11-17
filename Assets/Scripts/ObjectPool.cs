@@ -64,13 +64,6 @@ public class ObjectPool : MonoBehaviour
 
         //Creates a set number of starting entities
         instances = new List<GameObject>();
-
-        for (int i = 0; i < 10; i++)
-        {
-            GameObject o = Instantiate(prefab, storage, Quaternion.identity, parent);
-            instances.Add(o);
-            o.SetActive(false);
-        }
     }
 
     private void OnDestroy()

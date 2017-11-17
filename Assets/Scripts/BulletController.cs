@@ -8,6 +8,11 @@ public class BulletController : MonoBehaviour {
     public float moveSpeed;
     public Vector3 direction;
 
+    private void Start()
+    {
+        direction.Normalize();
+    }
+
     private void Update()
     {
         transform.Translate(direction * moveSpeed * Time.deltaTime);

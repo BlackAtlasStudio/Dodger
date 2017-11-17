@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114917660771380090}
   m_Layer: 0
   m_Name: Ship
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,12 +106,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9087f12b091a420b940ac1b8727af95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 9
-  edgeBuffer: 1
-  energyMeter: 10
-  energyMeterMax: 10
+  moveSpeedMax: 4
+  moveAcceleration: 3
+  moveDrag: 1
+  fireCooldown: 0.1
+  energyMeter: 20
+  energyMeterMax: 20
   energyRegen: 2
-  energyRegenDisabledBoost: 4
+  energyRegenDisabledBoost: 8
   bulletCost: 1
   dashCost: 5
   bulletPrefab: {fileID: 1904375089290456, guid: 5f1e2e14e953e488c85c77fd564f2e1a,

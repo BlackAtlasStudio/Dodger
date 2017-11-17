@@ -7,6 +7,7 @@ public class HUDController : MonoBehaviour {
 
     [Header("Energy Slider HUD")]
     public Gradient energyGradient;
+    public Vector3 energySliderOffset;
 
     [Header("HUD References")]
     public Slider energyMeter;
@@ -32,5 +33,7 @@ public class HUDController : MonoBehaviour {
         energyMeter.value = Mathf.Lerp(energyMeter.value, curVal, smoothing);
 
         energyMeterImage.color = energyGradient.Evaluate(energyMeter.normalizedValue);
+
+        energyMeter.transform.position = _player.transform.position + energySliderOffset;
     }
 }

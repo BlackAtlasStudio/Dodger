@@ -7,6 +7,7 @@ public class ObjectPoolManager : MonoBehaviour
     public Dictionary<string, ObjectPool> pools = new Dictionary<string, ObjectPool>();
     public int defaultMaxEntities = 10;
 
+#region SINGLETON
     private static ObjectPoolManager _instance;
 
     public static ObjectPoolManager Instance
@@ -25,6 +26,7 @@ public class ObjectPoolManager : MonoBehaviour
             return _instance;
         }
     }
+#endregion
 
     /// <summary>
     /// Creates a new ObjectPool with an identifier and prefab.
