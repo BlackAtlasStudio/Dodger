@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     [Range(0f, 5f)]
     public float moveDrag;
     public float fireCooldown;
+    [Range(-1f, 0f)]
+    public float snapTolerance;
 
     [Header ("Energy Settings")]
     public float energyMeter;
@@ -34,8 +36,16 @@ public class PlayerController : MonoBehaviour
     {
         //Creates a new movement delta based on the input
         Vector3 moveDelta = velocity;
+        if (Vector3.Dot(velocity, new Vector3(inputDir.x, 0f, inputDir.y)) <= snapTolerance && inputDir.magnitude >= 0.05f)
+        {
+            moveDelta = Vector3.zero;
+        }
         moveDelta.x += inputDir.x * moveAcceleration;
         moveDelta.z += inputDir.y * moveAcceleration;
+
+
+
+        //Add Drag
         if (inputDir.magnitude <= 0.05f) {
             Vector3 drag = moveDelta.normalized * -moveDrag;
             if (drag.magnitude >= moveDelta.magnitude)

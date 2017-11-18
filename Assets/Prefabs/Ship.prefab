@@ -106,13 +106,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9087f12b091a420b940ac1b8727af95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedMax: 4
+  moveSpeedMax: 6
   moveAcceleration: 3
   moveDrag: 1
   fireCooldown: 0.1
+  snapTolerance: -0.088
   energyMeter: 20
   energyMeterMax: 20
-  energyRegen: 2
+  energyRegen: 4
   energyRegenDisabledBoost: 8
   bulletCost: 1
   dashCost: 5

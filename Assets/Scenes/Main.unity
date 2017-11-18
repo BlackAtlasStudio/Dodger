@@ -429,7 +429,7 @@ RectTransform:
   m_GameObject: {fileID: 334182696}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0.0000059604645}
-  m_LocalScale: {x: 0.012200555, y: 0.012200555, z: 0.012200555}
+  m_LocalScale: {x: 0.012190046, y: 0.012190046, z: 0.012190046}
   m_Children:
   - {fileID: 1933600589}
   m_Father: {fileID: 614269826}
@@ -829,21 +829,6 @@ Prefab:
     - target: {fileID: 4467618021464912, guid: 97f3732e8b1394935b41075f2ef058d0, type: 2}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114461244798392320, guid: 97f3732e8b1394935b41075f2ef058d0,
-        type: 2}
-      propertyPath: spawnRateCurve.m_Curve.Array.data[1].value
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114461244798392320, guid: 97f3732e8b1394935b41075f2ef058d0,
-        type: 2}
-      propertyPath: spawnRateCurve.m_Curve.Array.data[1].inSlope
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114461244798392320, guid: 97f3732e8b1394935b41075f2ef058d0,
-        type: 2}
-      propertyPath: spawnRateCurve.m_Curve.Array.data[1].outSlope
-      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 97f3732e8b1394935b41075f2ef058d0, type: 2}

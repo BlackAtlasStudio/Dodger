@@ -34,7 +34,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1981570470436682}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10.16}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,9 +63,9 @@ MonoBehaviour:
       tangentMode: 0
     - serializedVersion: 2
       time: 60
-      value: 6
-      inSlope: 0.06666667
-      outSlope: 0.06666667
+      value: 10
+      inSlope: 0.13333334
+      outSlope: 0.13333334
       tangentMode: 34
     m_PreInfinity: 2
     m_PostInfinity: 2

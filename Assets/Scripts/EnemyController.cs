@@ -27,7 +27,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Vector3 moveDelta = moveDirection * EnemyManager.MoveSpeed * Time.deltaTime;
         transform.Translate(moveDelta);
