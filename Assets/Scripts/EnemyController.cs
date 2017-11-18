@@ -58,6 +58,8 @@ public class EnemyController : MonoBehaviour
             if (bulPool != null)
                 bulPool.Destroy(obj);
             flash = true;
+
+            ShakeManager.Shake(ShakeManager.SmallIntensity, 0.2f);
         }
     }
 }

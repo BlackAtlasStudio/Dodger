@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [Range(0f, 5f)]
     public float moveDrag;
     public float fireCooldown;
+    public float maxTurnAngle;
 
     [Header ("Energy Settings")]
     public float energyMeter;
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player References")]
     public GameObject bulletPrefab;
+    public GameObject playerModel;
 
     private bool meterDisabled = false;
     private ObjectPool bulletPool;
@@ -29,6 +31,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     private float fireTimer;
     private bool canFire;
+
+    private float turnAngle;
 
     private void Update()
     {
@@ -75,6 +79,20 @@ public class PlayerController : MonoBehaviour
                 fireTimer = 0f;
                 canFire = true;
             }
+        }
+
+        //Lerping Movement angle
+        float targetAngle = inputDir.x >= 0.1f ? -maxTurnAngle : 0f;
+        targetAngle += inputDir.x <= -0.1f ? maxTurnAngle : 0f;
+        turnAngle = Mathf.LerpAngle(turnAngle, targetAngle, Time.deltaTime * 10f);
+        playerModel.transform.rotation = Quaternion.AngleAxis(turnAngle, Vector3.forward);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            ShakeManager.Shake(ShakeManager.HugeIntensity, 0.5f);
         }
     }
 

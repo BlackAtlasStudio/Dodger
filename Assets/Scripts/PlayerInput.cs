@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof(PlayerController))]
 public class PlayerInput : MonoBehaviour {
 
     private PlayerController _controller;
