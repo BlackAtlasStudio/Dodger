@@ -11,9 +11,10 @@ public class PlayerController : MonoBehaviour
     [Range(0f, 5f)]
     public float moveDrag;
     public float fireCooldown;
+    public float damageCooldown;
     public float maxTurnAngle;
 
-    [Header ("Energy Settings")]
+    [Header("Energy Settings")]
     public float energyMeter;
     public float energyMeterMax;
     public float energyRegen;
@@ -30,9 +31,17 @@ public class PlayerController : MonoBehaviour
     private Vector2 inputDir;
     private Vector3 velocity = Vector3.zero;
     private float fireTimer;
+    private float damageTimer;
     private bool canFire;
-
+    private bool damaged;
+    private HealthController health;
     private float turnAngle;
+
+    private void Start()
+    {
+        health = GetComponent(typeof(HealthController)) as HealthController;
+        Debug.Assert(health != null);
+    }
 
     private void Update()
     {
@@ -40,7 +49,8 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDelta = velocity;
         moveDelta.x += inputDir.x * moveAcceleration;
         moveDelta.z += inputDir.y * moveAcceleration;
-        if (inputDir.magnitude <= 0.05f) {
+        if (inputDir.magnitude <= 0.05f)
+        {
             Vector3 drag = moveDelta.normalized * -moveDrag;
             if (drag.magnitude >= moveDelta.magnitude)
                 moveDelta = Vector3.zero;
@@ -72,12 +82,24 @@ public class PlayerController : MonoBehaviour
             meterDisabled = false;
 
         //Fire Cooldown
-        if (!canFire) {
+        if (!canFire)
+        {
             fireTimer += Time.deltaTime;
             if (fireTimer >= fireCooldown)
             {
                 fireTimer = 0f;
                 canFire = true;
+            }
+        }
+
+        //Health Cooldown
+        if (damaged)
+        {
+            damageTimer += Time.deltaTime;
+            if (damageTimer >= damageCooldown)
+            {
+                damageTimer = 0f;
+                damaged = false;
             }
         }
 
@@ -92,7 +114,12 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            ShakeManager.Shake(ShakeManager.HugeIntensity, 0.5f);
+            if (!damaged)
+            {
+                damaged = true;
+                health.Damage(10f);
+                ShakeManager.Shake(ShakeManager.HugeIntensity, 0.5f);
+            }
         }
     }
 
@@ -160,7 +187,8 @@ public class PlayerController : MonoBehaviour
         if (!canFire) return;
 
         //Call object pool to create a new bullet prefab
-        if (bulletPool == null) {
+        if (bulletPool == null)
+        {
             bulletPool = ObjectPoolManager.Instance.AddPool("Bullet", bulletPrefab, 50);
         }
 
@@ -168,10 +196,12 @@ public class PlayerController : MonoBehaviour
         {
             energyMeter -= bulletCost;
             bulletPool.Instantiate(transform.position, Quaternion.identity);
-        } else {
+        }
+        else
+        {
             meterDisabled = true;
         }
 
-        canFire = false; 
+        canFire = false;
     }
 }
