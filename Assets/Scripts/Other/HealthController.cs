@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HealthController : MonoBehaviour {
 
     public float Health { get; private set; }
     public float maxHealth;
+    public UnityEvent deathEvent;
 
     private void Start()
     {
@@ -14,6 +16,7 @@ public class HealthController : MonoBehaviour {
 
     public void Damage(float d)
     {
+        Debug.Log("Damaged");
         Health -= d;
         if (Health <= 0f)
         {
@@ -23,6 +26,6 @@ public class HealthController : MonoBehaviour {
 
     public void Death()
     {
-        Debug.Log("You died");
+        deathEvent.Invoke();
     }
 }
