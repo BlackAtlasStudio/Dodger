@@ -41,7 +41,7 @@ public class HUDController : MonoBehaviour {
         energyMeter.maxValue = player.energyMeter;
 
         healthMeter.minValue = 0;
-        healthMeter.maxValue = playerHealth.Health;
+        healthMeter.maxValue = playerHealth.maxHealth;
     }
 
     private void Update()
